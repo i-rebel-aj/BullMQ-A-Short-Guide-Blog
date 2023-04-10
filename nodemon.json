@@ -1,0 +1,5 @@
+{
+    "watch": ["src"],
+    "ext": "ts",
+    "exec": "concurrently \"ts-node src/EmailService.ts\" \"ts-node src/UserService.ts\" \"ts-node src/BullArena\""
+}
