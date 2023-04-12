@@ -1,28 +1,24 @@
+//Monitoring Service for our queue
+
 import express from 'express'
 const app=express()
 import Arena from 'bull-arena';
 import { Queue } from "bullmq";
-const defaultHostConfig = {
-    type: "bullmq",
-    redis: {
-        host: 'localhost',
-        port: 6379
-    }
-};
-const queueList=[
-    {
-        name: 'myMessageQueue',
-        hostId: 'myMessgaeQueue'
-    },
-]
+
 const arenaConfig = Arena(
     {
         BullMQ: Queue,
-        queues: queueList.map((q) => ({
-            name: q.name,
-            hostId: q.hostId ? q.hostId : q.name,
-            ...defaultHostConfig,
-        })),
+        queues: [
+            {
+                name: 'myMessageQueue',
+                type: 'bullmq',
+                hostId: 'myMessageQueue',
+                redis: {
+                    host: 'localhost',
+                    port: 6379
+                }
+            }
+        ],
     },
     { disableListen: true }
 );

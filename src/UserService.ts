@@ -1,18 +1,21 @@
 import express from 'express'
 import axios from 'axios'
 const app=express()
-import './MessageQueues'
+import {myMessageQueue} from './MessageQueues'
 
 /*
 Simple express route containing code of Microservice A (User Service), 
 the client calls POST /register method which registers the client. 
 */
+app.use(express.json({limit: '3mb'}));
 
 app.post("/", async (req, res)=>{
     try{
       //Code That Registers the user in DB
       //Code That sends subsequent request to Microservice B 
-      await axios.post("http://localhost:3000/send-email", {data: req.body})
+      //Old Axios Code
+      //await axios.post("http://localhost:3000/send-email", {data: req.body})
+      await myMessageQueue.add('Send Email Job', {...req.body})
       return res.send('User Signed Up Successfully')
     }catch(err){
       //Error Handling Code
